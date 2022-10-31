@@ -1,0 +1,10 @@
+.productContainer {
+/* background: rgb(2,25,77);
+background: linear-gradient(114deg, rgba(2,25,77,1) 0%, rgba(1,165,226,1) 85%, rgba(2,166,227,1) 100%);  */
+padding: 100px;
+}
+.productSeek {
+    max-width: 500px;
+    margin-left: 350px;
+    margin-bottom: 80px;
+}

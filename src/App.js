@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import Header from "./Header";
 import Home from "./Home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, useParams } from "react-router-dom";
 import Checkout from "./Checkout";
 import Login from "./Login";
 import Payment from "./Payment";
@@ -11,6 +11,11 @@ import { auth } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import Error from "./Error";
+import ProductSeek from "./ProductSeek";
+import { useState } from "react";
+import FormContact from "./FormContact";
+import Profile from "./Profile";
 
 const promise = loadStripe(
   "pk_test_51HPvU9DFg5koCdLGJJbNo60QAU99BejacsvnKvT8xnCu1wFLCuQP3WBArscK3RvSQmSIB3N0Pbsc7TtbQiJ1vaOi00X9sIbazL"
@@ -41,11 +46,20 @@ function App() {
       }
     });
   }, []);
+  
+  const [darkMode, setDarkMode] = useState (false);
 
   return (
     <Router>
-      <div className="app">
+      <div className="app" style={darkMode ? {backgroundColor:"#222222", color: "#ffffff"} : {backgroundColor: "#ffffff", color: "#000000"}}>
+      <button className="darkBtn" onClick={() => {setDarkMode(!darkMode)}}>
+            {darkMode ? "Light" : "Dark"}
+          </button>
         <Switch>
+          <Route path="/profile">
+            <Header/>
+            <Profile/>
+          </Route>
           <Route path="/orders">
             <Header />
             <Orders />
@@ -63,13 +77,32 @@ function App() {
               <Payment />
             </Elements>
           </Route>
-          <Route path="/">
+            <Route path="/" exact>
             <Header />
             <Home />
+            <FormContact/>
+          </Route>
+          <Route path="/product/:id">
+            <Prods/>
+          </Route>
+          <Route path="*">
+            <Header/>
+            <Error/>
           </Route>
         </Switch>
       </div>
     </Router>
+  );
+}
+
+export function Prods() {
+  let { id } = useParams();
+  const [darkMode, setDarkMode] = useState (false);
+  return (
+    <div>
+      <Header/>
+      <ProductSeek id={id}/>
+    </div>
   );
 }
 
